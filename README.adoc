@@ -1,0 +1,43 @@
+:last-update-label!:
+
+= References for tooling workshops
+
+Reference materials for monthly discussions around tooling for technical writers.
+
+== Organization
+
+References for each workshop are sorted into directories by **category**.
+Each categorical directory contains **topic** directories for individual discussion topics.
+Topic directories are not organized by date, but by utility.
+Each topic directory contains a [filename]`README.adoc` file with the reference material for the workshop.
+
+For example, references for the workshop on handling merge conflicts in Git can be found in the [filename]`reference/git/merge-conflicts/README.adoc` file.
+
+This organization is used for intuitive navigation on GitHub.
+
+== Contributing
+
+All of the available reference materials are written in AsciiDoc markup.
+
+Reference materials are organized based on utility, not number of workshops held.
+Only one reference file is used even if a particular topic has been covered multiple times.
+Append any additional information covered by a workshop to the appropriate reference file if one exists.
+
+[NOTE]
+====
+The content of this repository is released into the public domain.
+Ensure that any non-trivial pull request includes the following disclaimer:
+
+----
+I dedicate any and all copyright interest in this software to the
+public domain. I make this dedication for the benefit of the public at
+large and to the detriment of my heirs and successors. I intend this
+dedication to be an overt act of relinquishment in perpetuity of all
+present and future rights to this software under copyright law.
+----
+====
+
+== License
+
+This is free and unencumbered content released into the public domain.
+For more information, see the included link:UNLICENSE[UNLICENSE] file.
