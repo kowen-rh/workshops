@@ -1,0 +1,106 @@
+:last-update-label!:
+
+:prefix: git-undoing-things
+
+[id="{prefix}"]
+= Git: Undoing things
+
+[id="{prefix}-agenda"]
+== Agenda
+
+For many, Git makes it relatively easy to perform operations, but the actions required to undo them are less well-understood.
+This workshop covered such topics as how to undo commits, revert large changes without losing history, and other common tasks.
+
+[id="{prefix}-cmd-ref"]
+== Command reference
+
+Many of the commands referenced here use two dashes (`--`).
+This is done to instruct Git that we are explicitly working with files, not branches.
+
+Likewise, many of the commands here refer to `HEAD~__<n>__`.
+In Git, `HEAD` refers to the latest commit on the current branch, whereas `HEAD~1` points to the first parent commit of `HEAD`.
+To get to the parent of the parent of `HEAD`, use `HEAD~2`.
+This is often a concise way to access commits without knowing the specific SHA hash of the revision.
+For more information on `HEAD~__<n>__`, see the <<{prefix}-ext-ref>> section.
+
+=== Informational commands
+
+[command]`git ls-tree -r HEAD --name-only`::
+Display the files currently tracked by Git.
++
+[NOTE]
+====
+On newer versions of Git, use the [command]`git ls-files` command.
+====
+
+[command]`git reflog`::
+List the latest revisions known to Git, including revisions with no parent.
+Revisions are tracked for 90 days by default.
+The description shown before each revision (`HEAD@{__<n>__}`) can be used in other Git commands to refer to the appropriate commit.
+
+=== Unstaging and untracking files
+
+[command]`git reset HEAD \-- __<file>...__`::
+Unstage currently staged files.
+
+[command]`git checkout \-- __<file>__...`::
+Discard all of the changes in the given __file__.
+
+[command]`git rm --cached __<file>...__`::
+Untracks currently tracked files.
+The file remains in the repository, but untracked by Git.
+
+[command]`git rm __<file>__...`::
+Untracks the given files and removes them from the working tree.
++
+[WARNING]
+====
+**This is destructive!**
+Any changes made to these files are lost.
+====
+
+=== Undoing commits
+
+[WARNING]
+====
+**Only remove commits from your local copy of a Git repository.**
+Do not remove commits from a publically available repository, as this can break the Git history for others tracking the same repository.
+====
+
+[command]`git commit --amend`::
+Modify the most recent commit with the changes added through the [command]`git add` command.
+Technically, this does not modify the previous commit, but removes it and creates a new one based on the new contents.
+Use the [command]`git commit --amend --no-edit` command if you do not need to modify the commit message.
+
+[command]`git reset --soft HEAD~1`::
+Removes the latest commit and moves the changes to the staging area.
+
+[command]`git reset --mixed HEAD~1`::
+Removes the latest commit and moves the changes into the working tree.
+This is the default for the [command]`git reset` command.
+
+[command]`git reset --hard HEAD~1`::
+Removes the latest commit, removing changes in both the staging area and the working tree.
++
+[WARNING]
+====
+**This is destructive!**
+Any changes made to these files are lost.
+====
+
+[command]`git revert __<commit_hash>__`::
+Reverts the given __commit_hash__ by creating a new commit which undoes all of the changes in the given hash.
+This command preserves existing commits while undoing the changes.
+This keeps the history clean for others who are also working in the repository.
+
+[command]`git revert --no-commit HEAD~5..`::
+Reverts a range of commits from `HEAD~5` to the current `HEAD`.
+Note that the [command]`git revert --no-commit` command must be followed by an explicit [command]`git commit` or [command]`git revert --continue` command for the reversions to apply to the history.
+This command is ideal when multiple commits must be reverted at once, as this will only generate one commit object rather than multiple.
+
+[id="{prefix}-ext-ref"]
+== External references
+
+. link:https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things[Git - Undoing Things]
+. link:https://code.tutsplus.com/tutorials/what-are-the-three-trees-in-git--cms-28188[What Are the Three Trees in Git?]
+. link:http://www.paulboxley.com/blog/2011/06/git-caret-and-tilde[PaulBoxley.com - Git caret and tilde]
