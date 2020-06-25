@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# new-topic
+# 
+# A simple script to create a new set of reference materials for a topic. This
+# script takes *exactly* two arguments: a category name and a topic name. Given
+# a category and topic, creates the directory structure and a templated
+# `README.adoc` file for the given topic.
+# 
+# If `$VISUAL` is defined, open the generated file in the editor.
+# 
+# For example, to generate a new template for handling merge conflicts in Git:
+# 
+#     $ ./new-topic Git 'Handling merge conflicts'
+
+[ $# != 2 ] && echo "$(basename "$0"): two arguments required" 1>&2 && exit 1
+
+__convert__() {
+  printf '%s' "$(echo "$1" | tr '[A-Z]' '[a-z]' | tr '[:blank:]' '-')"
+}
+
+category_conv="$(__convert__ "$1")"
+topic_conv="$(__convert__ "$2")"
+ref_path="reference/$category_conv/$topic_conv"
+readme_file="$ref_path/README.adoc"
+
+mkdir -p "$ref_path" && cat << EOF > "$readme_file"
+:last-update-label!:
+
+:prefix: $category_conv-$topic_conv
+
+[id="{prefix}"]
+= $1: $2
+
+[id="{prefix}-agenda"]
+== Agenda
+
+Relevant information about the topic.
+
+[id="{prefix}-cmd-ref"]
+== Command reference
+
+[command]\`command\`::
+Describe the effect of running the command.
+
+[id="{prefix}-ext-ref"]
+== External references
+
+* link:http://www.example.com[Example URL]
+EOF
+
+[ ! -z "$VISUAL" ] && [ -e "$readme_file" ] && $VISUAL "$readme_file"
