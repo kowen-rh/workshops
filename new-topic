@@ -25,7 +25,12 @@ ref_path="reference/$category_conv/$topic_conv"
 readme_file="$ref_path/README.adoc"
 
 mkdir -p "$ref_path" && cat << EOF > "$readme_file"
+:experimental:
 :last-update-label!:
+:sectanchors:
+:sectlinks:
+:toc: left
+:toclevels: 3
 
 :prefix: $category_conv-$topic_conv
 
